@@ -1,9 +1,9 @@
 ---
 # hosts:
 git-host:
-    ansible_ssh_user: root    
-    ansible_host: git-lab 
-    # ansible_ssh_user: root
+  ansible_ssh_user: root    
+  ansible_host: git-lab 
+  # ansible_ssh_user: root
 
 vars:
   # Сетевая папка с дистрибутивными файлами сервиса
