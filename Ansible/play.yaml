@@ -53,8 +53,8 @@
     notify: reconfigure gitlab
 
 
-  # - name: Flush handlers
-  #   meta: flush_handlers
+  - name: Flush handlers
+    meta: flush_handlers
 
   - name: Шаблон git_backup_weekly-1.sh
     template:
