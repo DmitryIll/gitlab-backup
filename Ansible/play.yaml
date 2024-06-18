@@ -41,7 +41,7 @@
     - reconfigure
     ansible.builtin.lineinfile:
       path: /etc/gitlab/gitlab.rb
-      regexp: "'backup_path'"
+      regexp: "\'backup_path\'"
       line: "gitlab_rails['backup_path'] = \"{{ x_backup }}\""
 
   - name: Поречитать конфигурацию gitlab
