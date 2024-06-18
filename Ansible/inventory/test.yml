@@ -1,6 +1,6 @@
 ---
-hosts:
-  git-host:
+# hosts:
+git-host:
     ansible_ssh_user: root    
     ansible_host: git-lab 
     # ansible_ssh_user: root
