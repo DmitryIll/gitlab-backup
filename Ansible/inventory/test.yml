@@ -1,10 +1,10 @@
 ---
-# hosts:
 git-host:
-  ansible_ssh_user: root    
-  ansible_host: git-lab 
-  # ansible_ssh_user: root
-
+  hosts:
+    git-lab:
+      ansible_ssh_user: root    
+      # ansible_host: git-lab 
+      
 vars:
   # Сетевая папка с дистрибутивными файлами сервиса
   share_backup: "//backups"
