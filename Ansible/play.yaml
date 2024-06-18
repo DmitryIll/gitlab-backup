@@ -84,7 +84,7 @@
       month: '*'
       weekday: '*'
     
-  - name: Настройка расписания бэкапа файла gitlab.rb в первый день месяца в 00:05
+  - name: Настройка расписания бэкапа файла gitlab.rb в первый день месяца 
     cron:
       name: Start Weekly Script gitlab_rb backup
       job: '/root/gitlab_rb_backup_weekly-1.sh'
@@ -95,7 +95,7 @@
       month: '*'
       weekday: '*'
 
-  - name: Настройка расписания бэкапа GitLab каждый день в 00:10
+  - name: Настройка расписания бэкапа GitLab каждый день
     cron:
       name: Start xdaily Script gitlab backup
       job: '/opt/gitlab/bin/gitlab-rake COMPRESS_CMD=gzip -c --best gitlab:backup:create CRON=1'
@@ -106,7 +106,7 @@
       month: '*'
       weekday: '*'
 
-  - name: Настройка расписания бэкапа GitLab в первый день месяца в 02:00
+  - name: Настройка расписания бэкапа GitLab в первый день месяца
     cron:
       name: Start Weekly Script gitlab backup
       job: '/root/git_backup_weekly-1.sh'
