@@ -97,13 +97,13 @@
       month: '*'
       weekday: '*'
 
-  - name: Настройка расписания бэкапа GitLab в первый день месяца в 02:00
-    cron:
-      name: Start Script psql backup
-      job: '/root/git_backup_weekly-1.sh'
-      user: root
-      minute: '00'
-      hour: '02'
-      day: '1'
-      month: '*'
-      weekday: '*'
+  # - name: Настройка расписания бэкапа GitLab в первый день месяца в 02:00
+  #   cron:
+  #     name: Start Script psql backup
+  #     job: '/root/git_backup_weekly-1.sh'
+  #     user: root
+  #     minute: '00'
+  #     hour: '02'
+  #     day: '1'
+  #     month: '*'
+  #     weekday: '*'
