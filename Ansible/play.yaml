@@ -1,0 +1,104 @@
+---
+
+- name: Настройка бэкапа на rrp-git
+  hosts: git-host
+  # vars:
+  # vars_files: vars.yml
+  become: yes
+  tasks:
+
+  - name: Смонтировать сетевую папку для хранения бэкапов
+    mount:
+      src: '{{ share_backup }}'
+      path: '{{ mountpoint_backup }}'
+      fstype: cifs
+      opts: 'username={{ mount_user }},password={{ mount_pass }}, mfsymlinks,uid=git'
+      state: ephemeral
+
+  - name: Сконфигурировать gitlab.rb - установить срок хранения бэкапов в 604800 сек (7 дней)
+    tags:
+    - reconfigure
+    ansible.builtin.lineinfile:
+      path: /etc/gitlab/gitlab.rb
+      regexp: 'backup_keep_time'
+      line: "gitlab_rails['backup_keep_time'] = 604800"
+
+  - name: Сконфигурировать gitlab.rb - включить автоочистку бэкапов старше 604800 сек (7 дней)
+    tags:
+    - reconfigure
+    ansible.builtin.lineinfile:
+      path: /etc/gitlab/gitlab.rb
+      regexp: 'manage_backup_path'
+      line: "gitlab_rails['manage_backup_path'] = true"
+
+  - name: Сконфигурировать gitlab.rb - изменить путь храннеия бэкапов
+    tags:
+    - reconfigure
+    ansible.builtin.lineinfile:
+      path: /etc/gitlab/gitlab.rb
+      regexp: 'backup_path'
+      line: "gitlab_rails['backup_path'] = \"{{ x_backup }}\""
+
+  - name: Поречитать конфигурацию gitlab
+    tags:
+    - reconfigure
+    command: gitlab-ctl reconfigure
+
+  - name: Шаблон git_backup_weekly-1.sh
+    template:
+      src: ./templates/git_backup_weekly-1.sh.j2
+      dest: /root/git_backup_weekly-1.sh
+
+  - name: Шаблон gitlab_rb_backup_weekly-1.sh
+    template:
+      src: ./templates/gitlab_rb_backup_weekly-1.sh.j2
+      dest: /root/gitlab_rb_backup_weekly-1.sh  
+
+  - name: Шаблон gitlab_rb_backup_xdaily.sh
+    template:
+      src: ./templates/gitlab_rb_backup_xdaily.sh.j2
+      dest: /root/gitlab_rb_backup_xdaily.sh 
+  
+  - name: Настройка расписания бэкапа файла gitlab.rb каждый день в 00:00
+    cron:
+      name: Start Script psql backup
+      job: '/root/gitlab_rb_backup_xdaily.sh'
+      user: root
+      minute: '00'
+      hour: '00'
+      day: '*'
+      month: '*'
+      weekday: '*'
+    
+  - name: Настройка расписания бэкапа файла gitlab.rb в первый день месяца в 00:05
+    cron:
+      name: Start Script psql backup
+      job: '/root/gitlab_rb_backup_weekly-1.sh'
+      user: root
+      minute: '05'
+      hour: '00'
+      day: '1'
+      month: '*'
+      weekday: '*'
+
+  - name: Настройка расписания бэкапа GitLab каждый день в 00:10
+    cron:
+      name: Start Script psql backup
+      job: '/opt/gitlab/bin/gitlab-rake COMPRESS_CMD=gzip -c --best gitlab:backup:create CRON=1'
+      user: root
+      minute: '10'
+      hour: '00'
+      day: '*'
+      month: '*'
+      weekday: '*'
+
+  - name: Настройка расписания бэкапа GitLab в первый день месяца в 02:00
+    cron:
+      name: Start Script psql backup
+      job: '/root/git_backup_weekly-1.sh'
+      user: root
+      minute: '00'
+      hour: '02'
+      day: '1'
+      month: '*'
+      weekday: '*'

@@ -1,0 +1,8 @@
+#! /bin/bash
+#Define vars
+b_path_x="{{ x_backup }}"
+b_file_x=$(ls $b_path_x | grep _...._.._01)
+b_file_x_path={{ x_backup }}/${b_file_x}
+cp $b_file_x_path {{ w_backup }}/${b_file_x}
+
+#где очистка стархы бэкапов?
