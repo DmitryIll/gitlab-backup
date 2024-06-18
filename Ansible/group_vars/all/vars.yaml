@@ -1,8 +1,5 @@
 
 
-# # Сетевая папка с дистрибутивными файлами сервиса
-# share_backup: "//rrp-stor2.kc.kplus/SQL-Servers-D/rrp-git"
-
 mountpoint_backup: "/git-backup"
 x_backup: "/git-backup/xDaily"
 w_backup: "/git-backup/Weekly-1"
