@@ -12,13 +12,13 @@
       name:
         - cifs-utils
 
-  - name: Смонтировать сетевую папку для хранения бэкапов
-    mount:
-      src: '{{ share_backup }}'
-      path: '{{ mountpoint_backup }}'
-      fstype: cifs
-      opts: 'username={{ mount_user }},password={{ mount_pass }}, mfsymlinks,uid=git'
-      state: ephemeral
+  # - name: Смонтировать сетевую папку для хранения бэкапов
+  #   mount:
+  #     src: '{{ share_backup }}'
+  #     path: '{{ mountpoint_backup }}'
+  #     fstype: cifs
+  #     opts: 'username={{ mount_user }},password={{ mount_pass }}, mfsymlinks,uid=git'
+  #     state: ephemeral
 
   - name: Сконфигурировать gitlab.rb - установить срок хранения бэкапов в 604800 сек (7 дней)
     tags:
