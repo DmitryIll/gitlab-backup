@@ -7,7 +7,7 @@ git-host:
       
   vars:
     # Сетевая папка с дистрибутивными файлами сервиса
-    share_backup: "//backups"
+    share_backup: "/backups"
 
     # Учетные данные для монтирования сетевой папки
     mount_user: root
