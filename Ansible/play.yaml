@@ -7,6 +7,11 @@
   become: yes
   tasks:
 
+  - name: Установить cifs
+    apt:
+      name:
+        - cifs-utils
+
   - name: Смонтировать сетевую папку для хранения бэкапов
     mount:
       src: '{{ share_backup }}'
