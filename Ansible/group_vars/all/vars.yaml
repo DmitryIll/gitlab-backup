@@ -7,8 +7,22 @@ mountpoint_backup: "/git-backup"
 x_backup: "/git-backup/xDaily"
 w_backup: "/git-backup/Weekly-1"
 
+keep_xdaily_backup: 604800
+
+# бэкап конфига gitlab
+# ежедневно
+backup_xday_gitlab_rb_min: 00    
+backup_xday_gitlab_rb_hour: 00 
+# ежемесячно
+backup_month_gitlab_rb_min: 05
+backup_month_gitlab_rb_hour: 00
+
+# бэкап самого (базы) gitlab
+# ежедневно
+backup_xday_gitlab_min: 10
+backup_xday_gitlab_hour: 00 
+# еще месячно
+backup_month_gitlab_min: 00
+backup_month_gitlab_hour: 02
 
 
-# # Учетные данные для монтирования сетевой папки
-# mount_user: rrp-git-backup@kc.kplus
-# mount_pass: E)mt5Q1zJ

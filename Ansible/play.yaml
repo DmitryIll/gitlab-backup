@@ -24,16 +24,16 @@
   #     opts: 'username={{ mount_user }},password={{ mount_pass }}, mfsymlinks,uid=git'
   #     state: ephemeral
 
-  - name: Сконфигурировать gitlab.rb - установить срок хранения бэкапов в 604800 сек (7 дней)
+  - name: Сконфигурировать gitlab.rb - установить срок хранения бэкапов 
     tags:
     - reconfigure
     ansible.builtin.lineinfile:
       path: /etc/gitlab/gitlab.rb
       regexp: 'backup_keep_time'
-      line: "gitlab_rails['backup_keep_time'] = 604800"
+      line: "gitlab_rails['backup_keep_time'] = {{ keep_xdaily_backup }}"
     notify: reconfigure gitlab
 
-  - name: Сконфигурировать gitlab.rb - включить автоочистку бэкапов старше 604800 сек (7 дней)
+  - name: Сконфигурировать gitlab.rb - включить автоочистку бэкапов 
     tags:
     - reconfigure
     ansible.builtin.lineinfile:
@@ -54,6 +54,8 @@
 
 
   - name: Flush handlers
+    tags:
+    - reconfigure  
     meta: flush_handlers
 
   - name: Шаблон git_backup_weekly-1.sh
@@ -71,13 +73,13 @@
       src: ./templates/gitlab_rb_backup_xdaily.sh.j2
       dest: /root/gitlab_rb_backup_xdaily.sh 
   
-  - name: Настройка расписания бэкапа файла gitlab.rb каждый день в 00:00
+  - name: Настройка расписания бэкапа файла gitlab.rb каждый день 
     cron:
       name: Start xdaily Script gitlab_rb backup
       job: '/root/gitlab_rb_backup_xdaily.sh'
       user: root
-      minute: '00'
-      hour: '00'
+      minute: "{{ backup_xday_gitlab_rb_min }}"
+      hour: "{{ backup_xday_gitlab_rb_hour }}"
       day: '*'
       month: '*'
       weekday: '*'
@@ -87,8 +89,8 @@
       name: Start Weekly Script gitlab_rb backup
       job: '/root/gitlab_rb_backup_weekly-1.sh'
       user: root
-      minute: '05'
-      hour: '00'
+      minute: "{{ backup_month_gitlab_rb_min }}"
+      hour: "{{ backup_month_gitlab_rb_hour }}"
       day: '1'
       month: '*'
       weekday: '*'
@@ -98,8 +100,8 @@
       name: Start xdaily Script gitlab backup
       job: '/opt/gitlab/bin/gitlab-rake COMPRESS_CMD=gzip -c --best gitlab:backup:create CRON=1'
       user: root
-      minute: '10'
-      hour: '00'
+      minute: "{{ backup_xday_gitlab_min }}"
+      hour: "{{ backup_xday_gitlab_hour }}"
       day: '*'
       month: '*'
       weekday: '*'
@@ -109,8 +111,8 @@
       name: Start Weekly Script gitlab backup
       job: '/root/git_backup_weekly-1.sh'
       user: root
-      minute: '00'
-      hour: '02'
+      minute: "{{ backup_month_gitlab_min }}"
+      hour: "{{ backup_month_gitlab_hour }}"
       day: '1'
       month: '*'
       weekday: '*'
